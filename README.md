@@ -41,7 +41,7 @@ Picasa.photos(:album_id => "album_id")
 
 ## Contributors
 
-* [Bram Wijnands](https://github.com/BRamBoo)
+* [Bram Wijnands](https://github.com/Bram--)
 
 ## Copyright
 
