@@ -1,14 +1,16 @@
 # -*- encoding: utf-8 -*-
-require "helper"
+require "spec_helper"
 
 describe Picasa::Photo do
   describe "#list" do
+    subject { @album.list }
+
     it "should be scoped to given user when user_id is present" do
       response = fixture_file("photo/photo-list-user.txt")
       FakeWeb.register_uri(:get, "https://picasaweb.google.com/data/feed/api/user/w.wnetrzak?kind=photo", :response => response)
       @album = Picasa::Photo.new("w.wnetrzak")
 
-      assert_equal "Wojciech Wnętrzak", @album.list["author"]["name"]
+      @album.list["author"]["name"].should eql 'Wojciech Wnętrzak'
     end
 
     # without user_id
@@ -18,7 +20,7 @@ describe Picasa::Photo do
       FakeWeb.register_uri(:get, "https://picasaweb.google.com/data/feed/api/user/all?kind=photo", :response => response)
       @album = Picasa::Photo.new
 
-      assert_nil @album.list["author"]
+      @album.list["author"].should be_nil
     end
 
     it "should scope results to given query" do
@@ -26,7 +28,8 @@ describe Picasa::Photo do
       FakeWeb.register_uri(:get, "https://picasaweb.google.com/data/feed/api/user/all?kind=photo&q=cowbell", :response => response)
       @album = Picasa::Photo.new
 
-      assert_match "cowbell", @album.list(:q => "cowbell")["entry"][0]["title"]
+      @album.list(:q => "cowbell")["entry"][0]["title"].should match "cowbell"
     end
   end
 end
+
